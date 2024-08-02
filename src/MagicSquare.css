@@ -21,6 +21,7 @@
     justify-content: center;
     align-items: center;
     border: 1px solid transparent;
+    font-size: calc(10px + 1vw); /* Responsive font size */
 }
 
 .show-grid .cell {
@@ -45,4 +46,6 @@
 button {
     flex-grow: 1;
     margin: 5px;
+    padding: 10px;
+    cursor: pointer;
 }
