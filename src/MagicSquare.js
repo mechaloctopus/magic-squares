@@ -39,13 +39,16 @@ const MagicSquare = ({ square }) => {
                 const positions = [];
                 const sequence = getSequence(type);
 
-                for (let i = 0; i < square.length; i++) {
-                    for (let j = 0; j < square[i].length; j++) {
-                        const num = square[i][j];
-                        if (sequence.includes(num)) {
-                            const x = j * cellSize + cellSize / 2;
-                            const y = i * cellSize + cellSize / 2;
-                            positions.push([x, y]);
+                for (const num of sequence) {
+                    outerLoop:
+                    for (let i = 0; i < square.length; i++) {
+                        for (let j = 0; j < square[i].length; j++) {
+                            if (square[i][j] === num) {
+                                const x = j * cellSize + cellSize / 2;
+                                const y = i * cellSize + cellSize / 2;
+                                positions.push([x, y]);
+                                break outerLoop;
+                            }
                         }
                     }
                 }
