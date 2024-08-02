@@ -5,6 +5,7 @@ const MagicSquare = ({ square }) => {
     const canvasRef = useRef(null);
     const [drawings, setDrawings] = useState({ all: false, even: false, odd: false });
     const [showNumbers, setShowNumbers] = useState(true);
+    const [showGrid, setShowGrid] = useState(true);
 
     const getSequence = (type) => {
         const numbers = [];
@@ -73,6 +74,9 @@ const MagicSquare = ({ square }) => {
     };
 
     useEffect(() => {
+        const canvas = canvasRef.current;
+        canvas.width = square.length * 50;
+        canvas.height = square.length * 50;
         drawLines();
     }, [drawings]);
 
@@ -91,13 +95,17 @@ const MagicSquare = ({ square }) => {
         setShowNumbers(!showNumbers);
     };
 
+    const toggleGrid = () => {
+        setShowGrid(!showGrid);
+    };
+
     return (
         <div className="magic-square-container">
             <div className="magic-square" style={{ gridTemplateColumns: `repeat(${square.length}, 50px)`, gridTemplateRows: `repeat(${square.length}, 50px)` }}>
                 {square.map((row, rowIndex) => (
                     <React.Fragment key={rowIndex}>
                         {row.map((cell, cellIndex) => (
-                            <div className="cell" key={cellIndex}>
+                            <div className={`cell ${showGrid ? 'show-grid' : ''}`} key={cellIndex}>
                                 {showNumbers && cell}
                             </div>
                         ))}
@@ -106,8 +114,6 @@ const MagicSquare = ({ square }) => {
             </div>
             <canvas
                 ref={canvasRef}
-                width={square.length * 50}
-                height={square.length * 50}
                 className="magic-square-canvas"
             ></canvas>
             <div className="button-group">
@@ -115,6 +121,7 @@ const MagicSquare = ({ square }) => {
                 <button onClick={() => handleToggle('even')} className="blue-button">Magic Button Even</button>
                 <button onClick={() => handleToggle('odd')} className="red-button">Magic Button Odd</button>
                 <button onClick={toggleNumbers} className="toggle-numbers-button">Toggle Numbers</button>
+                <button onClick={toggleGrid} className="toggle-grid-button">Toggle Grid</button>
             </div>
         </div>
     );
