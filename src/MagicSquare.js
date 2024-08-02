@@ -4,7 +4,9 @@ import './MagicSquare.css';
 const MagicSquare = ({ square }) => {
     const canvasRef = useRef(null);
     const [drawing, setDrawing] = useState(false);
-    const [drawings, setDrawings] = useState({ all: [], even: [], odd: [], multipleOf3: [] });
+    const [drawings, setDrawings] = useState({ all: [], even: [], odd: [] });
+    const [showNumbers, setShowNumbers] = useState(true);
+    const [showLines, setShowLines] = useState({ all: true, even: true, odd: true });
 
     const getSequence = (type) => {
         const numbers = [];
@@ -20,10 +22,6 @@ const MagicSquare = ({ square }) => {
             }
         } else if (type === 'odd') {
             for (let i = 1; i <= maxNumber; i += 2) {
-                numbers.push(i);
-            }
-        } else if (type === 'multipleOf3') {
-            for (let i = 3; i <= maxNumber; i += 3) {
                 numbers.push(i);
             }
         }
@@ -50,7 +48,7 @@ const MagicSquare = ({ square }) => {
         }
     };
 
-    const handleButtonClick = (type) => {
+    const handleToggleChange = (type) => {
         if (drawing) return;
         setDrawing(true);
         const canvas = canvasRef.current;
@@ -58,7 +56,7 @@ const MagicSquare = ({ square }) => {
         const positions = [];
         const cellSize = canvas.width / square.length;
         const sequence = getSequence(type);
-        const color = type === 'all' ? 'cyan' : type === 'even' ? 'magenta' : type === 'odd' ? 'lime' : 'yellow';
+        const color = type === 'all' ? 'cyan' : type === 'even' ? 'magenta' : 'lime';
 
         for (let i = 0; i < square.length; i++) {
             for (let j = 0; j < square[i].length; j++) {
@@ -84,17 +82,17 @@ const MagicSquare = ({ square }) => {
         const context = canvas.getContext('2d');
         context.clearRect(0, 0, canvas.width, canvas.height);
 
-        const colors = { all: 'cyan', even: 'magenta', odd: 'lime', multipleOf3: 'yellow' };
+        const colors = { all: 'cyan', even: 'magenta', odd: 'lime' };
 
         for (const [type, positions] of Object.entries(drawings)) {
-            if (positions.length > 0) {
+            if (positions.length > 0 && showLines[type]) {
                 drawLine(context, positions, 0, colors[type]);
             }
         }
-    }, [drawings]);
+    }, [drawings, showLines]);
 
     useEffect(() => {
-        setDrawings({ all: [], even: [], odd: [], multipleOf3: [] });
+        setDrawings({ all: [], even: [], odd: [] });
         const canvas = canvasRef.current;
         const context = canvas.getContext('2d');
         context.clearRect(0, 0, canvas.width, canvas.height);
@@ -107,7 +105,7 @@ const MagicSquare = ({ square }) => {
                     <React.Fragment key={rowIndex}>
                         {row.map((cell, cellIndex) => (
                             <div className="cell" key={cellIndex}>
-                                {cell}
+                                {showNumbers && cell}
                             </div>
                         ))}
                     </React.Fragment>
@@ -120,10 +118,22 @@ const MagicSquare = ({ square }) => {
                 className="magic-square-canvas"
             ></canvas>
             <div className="button-group">
-                <button onClick={() => handleButtonClick('all')} disabled={drawing} className="black-button">Magic Button 1</button>
-                <button onClick={() => handleButtonClick('even')} disabled={drawing} className="blue-button">Magic Button 2</button>
-                <button onClick={() => handleButtonClick('odd')} disabled={drawing} className="red-button">Magic Button 3</button>
-                <button onClick={() => handleButtonClick('multipleOf3')} disabled={drawing} className="yellow-button">Magic Button 4</button>
+                <label>
+                    <input type="checkbox" checked={showLines.all} onChange={() => setShowLines({ ...showLines, all: !showLines.all })} />
+                    Magic Button 1
+                </label>
+                <label>
+                    <input type="checkbox" checked={showLines.even} onChange={() => setShowLines({ ...showLines, even: !showLines.even })} />
+                    Magic Button Even
+                </label>
+                <label>
+                    <input type="checkbox" checked={showLines.odd} onChange={() => setShowLines({ ...showLines, odd: !showLines.odd })} />
+                    Magic Button Odd
+                </label>
+                <label>
+                    <input type="checkbox" checked={showNumbers} onChange={() => setShowNumbers(!showNumbers)} />
+                    Show Numbers
+                </label>
             </div>
         </div>
     );
