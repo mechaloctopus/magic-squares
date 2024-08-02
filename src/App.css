@@ -1,47 +1,16 @@
 .App {
   text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
+  background-color: black;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.pagination {
+.button-group {
   margin-top: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 button {
@@ -54,4 +23,33 @@ button {
 button:disabled {
   cursor: not-allowed;
   opacity: 0.5;
+}
+
+.black-button {
+  background-color: black;
+  color: white;
+}
+
+.blue-button {
+  background-color: blue;
+  color: white;
+}
+
+.red-button {
+  background-color: red;
+  color: white;
+}
+
+.yellow-button {
+  background-color: yellow;
+  color: black;
+}
+
+@keyframes pulse {
+  0% {
+    text-shadow: 0 0 5px white, 0 0 10px white, 0 0 15px white, 0 0 20px white, 0 0 25px white, 0 0 30px white, 0 0 35px white;
+  }
+  100% {
+    text-shadow: 0 0 10px white, 0 0 20px white, 0 0 30px white, 0 0 40px white, 0 0 50px white, 0 0 60px white, 0 0 70px white;
+  }
 }
