@@ -67,11 +67,8 @@ const MagicSquare = ({ square }) => {
                         context.lineTo(x, y);
                     }
                 }
-                context.closePath();
                 context.strokeStyle = colors[type];
                 context.lineWidth = 2;
-                context.shadowBlur = 5;
-                context.shadowColor = colors[type];
                 context.stroke();
             }
         }
@@ -97,8 +94,8 @@ const MagicSquare = ({ square }) => {
     };
 
     return (
-        <div className="magic-square-container" ref={containerRef}>
-            <div className={`magic-square ${showGrid ? 'show-grid' : ''}`} style={{ gridTemplateColumns: `repeat(${square.length}, 1fr)`, gridTemplateRows: `repeat(${square.length}, 1fr)` }}>
+        <div className="magic-square-container">
+            <div ref={containerRef} className={`magic-square ${showGrid ? 'show-grid' : ''}`} style={{ gridTemplateColumns: `repeat(${square.length}, 1fr)`, gridTemplateRows: `repeat(${square.length}, 1fr)` }}>
                 {square.map((row, rowIndex) => (
                     <React.Fragment key={rowIndex}>
                         {row.map((cell, cellIndex) => (
@@ -109,10 +106,7 @@ const MagicSquare = ({ square }) => {
                     </React.Fragment>
                 ))}
             </div>
-            <canvas
-                ref={canvasRef}
-                className="magic-square-canvas"
-            ></canvas>
+            <canvas ref={canvasRef} className="magic-square-canvas"></canvas>
             <div className="button-group">
                 <button onClick={() => handleToggle('all')} className="black-button">Magic Button 1</button>
                 <button onClick={() => handleToggle('even')} className="blue-button">Magic Button Even</button>
