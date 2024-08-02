@@ -1,7 +1,8 @@
 .magic-square-container {
     position: relative;
-    display: inline-block;
     width: 100%;
+    max-width: 600px; /* Adjust as needed */
+    margin: 0 auto;
     padding-top: 100%; /* Maintain aspect ratio */
     overflow: hidden;
 }
@@ -22,7 +23,7 @@
     border: 1px solid transparent;
 }
 
-.cell.show-grid {
+.show-grid .cell {
     border: 1px solid #000;
 }
 
@@ -37,8 +38,11 @@
 
 .button-group {
     margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
 }
 
 button {
-    margin-right: 10px;
+    flex-grow: 1;
+    margin: 5px;
 }
