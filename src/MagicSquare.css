@@ -1,0 +1,38 @@
+.magic-square-container {
+    position: relative;
+    display: inline-block;
+    margin: 20px;
+}
+
+.magic-square {
+    display: inline-block;
+    position: relative;
+    z-index: 1;
+}
+
+.row {
+    display: flex;
+}
+
+.cell {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #000;
+    font-size: 18px;
+    position: relative;
+    z-index: 2;
+}
+
+.magic-square-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+button {
+    margin-top: 10px;
+}
