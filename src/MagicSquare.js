@@ -3,10 +3,8 @@ import './MagicSquare.css';
 
 const MagicSquare = ({ square }) => {
     const canvasRef = useRef(null);
-    const [drawing, setDrawing] = useState(false);
-    const [drawings, setDrawings] = useState({ all: [], even: [], odd: [] });
+    const [drawings, setDrawings] = useState({ all: false, even: false, odd: false });
     const [showNumbers, setShowNumbers] = useState(true);
-    const [showLines, setShowLines] = useState({ all: true, even: true, odd: true });
 
     const getSequence = (type) => {
         const numbers = [];
@@ -29,74 +27,66 @@ const MagicSquare = ({ square }) => {
         return numbers;
     };
 
-    const drawLine = (context, positions, index, color, callback) => {
-        if (index < positions.length) {
-            const [x0, y0] = positions[index];
-            const [x1, y1] = index === positions.length - 1 ? positions[0] : positions[index + 1];
-            context.beginPath();
-            context.moveTo(x0, y0);
-            context.lineTo(x1, y1);
-            context.strokeStyle = color;
-            context.lineWidth = 4;
-            context.shadowBlur = 10;
-            context.shadowColor = color;
-            context.stroke();
-            setTimeout(() => drawLine(context, positions, index + 1, color, callback), 500);
-        } else {
-            setDrawing(false);
-            if (callback) callback();
-        }
-    };
-
-    const handleToggleChange = (type) => {
-        if (drawing) return;
-        setDrawing(true);
+    const drawLines = () => {
         const canvas = canvasRef.current;
         const context = canvas.getContext('2d');
-        const positions = [];
         const cellSize = canvas.width / square.length;
-        const sequence = getSequence(type);
-        const color = type === 'all' ? 'cyan' : type === 'even' ? 'magenta' : 'lime';
-
-        for (let i = 0; i < square.length; i++) {
-            for (let j = 0; j < square[i].length; j++) {
-                const num = square[i][j];
-                if (sequence.includes(num)) {
-                    const x = j * cellSize + cellSize / 2;
-                    const y = i * cellSize + cellSize / 2;
-                    positions[num - 1] = [x, y];
-                }
-            }
-        }
-
-        const filteredPositions = positions.filter(position => position !== undefined);
-
-        setDrawings((prevDrawings) => ({
-            ...prevDrawings,
-            [type]: filteredPositions,
-        }));
-    };
-
-    useEffect(() => {
-        const canvas = canvasRef.current;
-        const context = canvas.getContext('2d');
         context.clearRect(0, 0, canvas.width, canvas.height);
 
         const colors = { all: 'cyan', even: 'magenta', odd: 'lime' };
+        for (const type in drawings) {
+            if (drawings[type]) {
+                const positions = [];
+                const sequence = getSequence(type);
 
-        for (const [type, positions] of Object.entries(drawings)) {
-            if (positions.length > 0 && showLines[type]) {
-                drawLine(context, positions, 0, colors[type]);
+                for (let i = 0; i < square.length; i++) {
+                    for (let j = 0; j < square[i].length; j++) {
+                        const num = square[i][j];
+                        if (sequence.includes(num)) {
+                            const x = j * cellSize + cellSize / 2;
+                            const y = i * cellSize + cellSize / 2;
+                            positions.push([x, y]);
+                        }
+                    }
+                }
+
+                context.beginPath();
+                for (let k = 0; k < positions.length; k++) {
+                    const [x, y] = positions[k];
+                    if (k === 0) {
+                        context.moveTo(x, y);
+                    } else {
+                        context.lineTo(x, y);
+                    }
+                }
+                context.closePath();
+                context.strokeStyle = colors[type];
+                context.lineWidth = 4;
+                context.shadowBlur = 10;
+                context.shadowColor = colors[type];
+                context.stroke();
             }
         }
-    }, [drawings, showLines]);
+    };
 
     useEffect(() => {
-        setDrawings({ all: [], even: [], odd: [] });
-        const canvas = canvasRef.current;
-        const context = canvas.getContext('2d');
-        context.clearRect(0, 0, canvas.width, canvas.height);
+        drawLines();
+    }, [drawings]);
+
+    useEffect(() => {
+        drawLines();
     }, [square]);
+
+    const handleToggle = (type) => {
+        setDrawings((prevDrawings) => ({
+            ...prevDrawings,
+            [type]: !prevDrawings[type],
+        }));
+    };
+
+    const toggleNumbers = () => {
+        setShowNumbers(!showNumbers);
+    };
 
     return (
         <div className="magic-square-container">
@@ -118,22 +108,10 @@ const MagicSquare = ({ square }) => {
                 className="magic-square-canvas"
             ></canvas>
             <div className="button-group">
-                <label>
-                    <input type="checkbox" checked={showLines.all} onChange={() => setShowLines({ ...showLines, all: !showLines.all })} />
-                    Magic Button 1
-                </label>
-                <label>
-                    <input type="checkbox" checked={showLines.even} onChange={() => setShowLines({ ...showLines, even: !showLines.even })} />
-                    Magic Button Even
-                </label>
-                <label>
-                    <input type="checkbox" checked={showLines.odd} onChange={() => setShowLines({ ...showLines, odd: !showLines.odd })} />
-                    Magic Button Odd
-                </label>
-                <label>
-                    <input type="checkbox" checked={showNumbers} onChange={() => setShowNumbers(!showNumbers)} />
-                    Show Numbers
-                </label>
+                <button onClick={() => handleToggle('all')} className="black-button">Magic Button 1</button>
+                <button onClick={() => handleToggle('even')} className="blue-button">Magic Button Even</button>
+                <button onClick={() => handleToggle('odd')} className="red-button">Magic Button Odd</button>
+                <button onClick={toggleNumbers} className="toggle-numbers-button">Toggle Numbers</button>
             </div>
         </div>
     );
