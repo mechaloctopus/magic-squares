@@ -98,11 +98,11 @@ const MagicSquare = ({ square }) => {
 
     return (
         <div className="magic-square-container" ref={containerRef}>
-            <div className="magic-square" style={{ gridTemplateColumns: `repeat(${square.length}, 1fr)`, gridTemplateRows: `repeat(${square.length}, 1fr)` }}>
+            <div className={`magic-square ${showGrid ? 'show-grid' : ''}`} style={{ gridTemplateColumns: `repeat(${square.length}, 1fr)`, gridTemplateRows: `repeat(${square.length}, 1fr)` }}>
                 {square.map((row, rowIndex) => (
                     <React.Fragment key={rowIndex}>
                         {row.map((cell, cellIndex) => (
-                            <div className={`cell ${showGrid ? 'show-grid' : ''}`} key={cellIndex}>
+                            <div className="cell" key={cellIndex}>
                                 {showNumbers && cell}
                             </div>
                         ))}
