@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import MagicSquare from './MagicSquare';
 import './App.css'; // Ensure you have some basic styles for buttons and layout
 
-const ITEMS_PER_PAGE = 20;
+const ITEMS_PER_PAGE = 1;
 
 function App() {
     const [magicSquares, setMagicSquares] = useState([]);
