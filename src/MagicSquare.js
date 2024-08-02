@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import './MagicSquare.css';
 
 const MagicSquare = ({ square }) => {
+    const containerRef = useRef(null);
     const canvasRef = useRef(null);
     const [drawings, setDrawings] = useState({ all: false, even: false, odd: false });
     const [showNumbers, setShowNumbers] = useState(true);
@@ -29,9 +30,12 @@ const MagicSquare = ({ square }) => {
     };
 
     const drawLines = () => {
+        const container = containerRef.current;
         const canvas = canvasRef.current;
         const context = canvas.getContext('2d');
-        const cellSize = canvas.width / square.length;
+        const cellSize = container.clientWidth / square.length;
+        canvas.width = container.clientWidth;
+        canvas.height = container.clientWidth;
         context.clearRect(0, 0, canvas.width, canvas.height);
 
         const colors = { all: 'cyan', even: 'magenta', odd: 'lime' };
@@ -65,8 +69,8 @@ const MagicSquare = ({ square }) => {
                 }
                 context.closePath();
                 context.strokeStyle = colors[type];
-                context.lineWidth = 4;
-                context.shadowBlur = 10;
+                context.lineWidth = 2;
+                context.shadowBlur = 5;
                 context.shadowColor = colors[type];
                 context.stroke();
             }
@@ -74,15 +78,8 @@ const MagicSquare = ({ square }) => {
     };
 
     useEffect(() => {
-        const canvas = canvasRef.current;
-        canvas.width = square.length * 50;
-        canvas.height = square.length * 50;
         drawLines();
-    }, [drawings]);
-
-    useEffect(() => {
-        drawLines();
-    }, [square]);
+    }, [drawings, square]);
 
     const handleToggle = (type) => {
         setDrawings((prevDrawings) => ({
@@ -100,8 +97,8 @@ const MagicSquare = ({ square }) => {
     };
 
     return (
-        <div className="magic-square-container">
-            <div className="magic-square" style={{ gridTemplateColumns: `repeat(${square.length}, 50px)`, gridTemplateRows: `repeat(${square.length}, 50px)` }}>
+        <div className="magic-square-container" ref={containerRef}>
+            <div className="magic-square" style={{ gridTemplateColumns: `repeat(${square.length}, 1fr)`, gridTemplateRows: `repeat(${square.length}, 1fr)` }}>
                 {square.map((row, rowIndex) => (
                     <React.Fragment key={rowIndex}>
                         {row.map((cell, cellIndex) => (
