@@ -1,0 +1,21 @@
+.magic-square-grid {
+    display: grid;
+    gap: 0;
+    position: relative;
+    z-index: 1;
+}
+
+.cell {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid white;
+    font-size: 14px;
+    color: white;
+}
+
+.no-border {
+    border: none;
+}
