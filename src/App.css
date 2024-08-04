@@ -20,6 +20,7 @@
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     width: fit-content; /* Ensure container width is based on content */
+    min-height: fit-content; /* Ensure container height is based on content */
 }
 
 .grid-canvas-container {
@@ -28,6 +29,7 @@
     justify-content: center;
     align-items: center;
     margin-bottom: 20px; /* Add space between grid and buttons */
+    width: fit-content; /* Ensure the container adjusts based on grid size */
 }
 
 .magic-square-grid {
