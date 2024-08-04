@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 
 const ITEMS_PER_PAGE = 20;
-const GRID_LINE_WIDTH = 1;
 
 const MagicSquare = ({ square, showGrid, showNumbers, drawings, onDraw, offsetX, offsetY, scale }) => {
     const cellSize = 30;
@@ -84,9 +83,9 @@ const App = () => {
     const [drawings, setDrawings] = useState({});
     const [showGrid, setShowGrid] = useState(true);
     const [showNumbers, setShowNumbers] = useState(true);
-    const [offsetX, setOffsetX] = useState(0);
-    const [offsetY, setOffsetY] = useState(0);
-    const [scale, setScale] = useState(1);
+    const [offsetX, setOffsetX] = useState(0); // Adjust this value for initial horizontal position
+    const [offsetY, setOffsetY] = useState(0); // Adjust this value for initial vertical position
+    const [scale, setScale] = useState(1); // Adjust this value for initial scale
 
     useEffect(() => {
         fetch('/complete_magic_squares.json')
