@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import MagicSquare from './MagicSquare';
-import './App.css'; // Ensure you have some basic styles for buttons and layout
+import MagicSquareCard from './MagicSquareCard';
+import './App.css';
 
 const ITEMS_PER_PAGE = 20;
 
@@ -34,10 +34,7 @@ function App() {
         <div className="App">
             <h1>Magic Squares</h1>
             {currentMagicSquares.map((square, index) => (
-                <div key={index}>
-                    <h2>Magic Square {square.dimension}x{square.dimension} - {square.number}</h2>
-                    <MagicSquare square={square.magic_square} />
-                </div>
+                <MagicSquareCard key={index} square={square.magic_square} />
             ))}
             <div className="pagination">
                 <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>Previous</button>
