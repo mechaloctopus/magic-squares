@@ -83,9 +83,9 @@ const App = () => {
     const [drawings, setDrawings] = useState({});
     const [showGrid, setShowGrid] = useState(true);
     const [showNumbers, setShowNumbers] = useState(true);
-    const [offsetX, setOffsetX] = useState(60); // Adjust this value for initial horizontal position
+    const [offsetX, setOffsetX] = useState(120); // Adjust this value for initial horizontal position
     const [offsetY, setOffsetY] = useState(15); // Adjust this value for initial vertical position
-    const [scale, setScale] = useState(1.01); // Adjust this value for initial scale
+    const [scale, setScale] = useState(1); // Adjust this value for initial scale
 
     useEffect(() => {
         fetch('/complete_magic_squares.json')
