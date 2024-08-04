@@ -13,7 +13,7 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    align-items: center; /* Center align */
+    align-items: center;
     margin: 20px;
     background-color: #1a1a1a;
     padding: 20px;
@@ -21,11 +21,18 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
+.grid-canvas-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .magic-square-grid {
     display: grid;
     gap: 0;
-    position: relative;
-    z-index: 2; /* Ensure the grid is above the container background */
+    position: absolute;
+    z-index: 1;
 }
 
 .cell {
@@ -45,9 +52,7 @@
 
 .magic-square-canvas {
     position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 3; /* Ensure the canvas is on top */
+    z-index: 2;
     pointer-events: none;
 }
 
@@ -89,12 +94,4 @@
 .checkbox-group label {
     margin-right: 10px;
     color: white;
-}
-
-.controls {
-    margin-top: 20px;
-}
-
-.controls label {
-    margin-right: 10px;
 }
