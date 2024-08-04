@@ -87,10 +87,14 @@ const App = () => {
             .catch(error => console.error('Error fetching magic squares:', error));
     }, []);
 
-    const handleDraw = (type, data) => {
+    useEffect(() => {
+        setDrawings({});
+    }, [currentPage]);
+
+    const handleDraw = (index, type, data) => {
         if (type === 'toggleGrid') setShowGrid(data);
         else if (type === 'toggleNumbers') setShowNumbers(data);
-        else setDrawings({ ...drawings, [type]: data });
+        else setDrawings(prevDrawings => ({ ...prevDrawings, [index]: { ...prevDrawings[index], [type]: data } }));
     };
 
     const totalPages = Math.ceil(magicSquares.length / ITEMS_PER_PAGE);
@@ -99,8 +103,15 @@ const App = () => {
     return (
         <div className="App">
             <h1>Magic Squares</h1>
-            {currentMagicSquares.map((square, index) => (
-                <MagicSquare key={index} square={square.magic_square} showGrid={showGrid} showNumbers={showNumbers} drawings={drawings} onDraw={handleDraw} />
+            {currentMagicSquares.map((squareData, index) => (
+                <MagicSquare
+                    key={index}
+                    square={squareData.magic_square}
+                    showGrid={showGrid}
+                    showNumbers={showNumbers}
+                    drawings={drawings[index] || {}}
+                    onDraw={(type, data) => handleDraw(index, type, data)}
+                />
             ))}
             <div className="pagination">
                 <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1}>Previous</button>
