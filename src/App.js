@@ -6,8 +6,6 @@ const GRID_LINE_WIDTH = 1;
 
 const MagicSquare = ({ square, showGrid, showNumbers, drawings, onDraw }) => {
     const cellSize = 30;
-    const adjustedCellSize = cellSize - GRID_LINE_WIDTH; // Adjust cell size to account for grid line width
-    const canvasSize = square.length * cellSize + cellSize / 2; // Make canvas slightly larger
 
     const handleDraw = (type) => {
         const maxNumber = square.length * square.length;
@@ -41,7 +39,7 @@ const MagicSquare = ({ square, showGrid, showNumbers, drawings, onDraw }) => {
                     ))
                 )}
             </div>
-            <canvas className="magic-square-canvas" width={canvasSize} height={canvasSize} ref={(canvas) => {
+            <canvas className="magic-square-canvas" width={square.length * cellSize} height={square.length * cellSize} ref={(canvas) => {
                 if (canvas) {
                     const context = canvas.getContext('2d');
                     context.clearRect(0, 0, canvas.width, canvas.height);
