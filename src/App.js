@@ -20,7 +20,7 @@ const MagicSquare = ({ square, showGrid, showNumbers, drawings, onDraw }) => {
             for (let i = 0; i < square.length; i++) {
                 for (let j = 0; j < square[i].length; j++) {
                     if (square[i][j] === num) {
-                        return [j * adjustedCellSize + cellSize / 2, i * adjustedCellSize + cellSize / 2];
+                        return [(j + 1) * adjustedCellSize + cellSize / 2, (i + 1) * adjustedCellSize + cellSize / 2]; // Move one cell right and one cell down
                     }
                 }
             }
