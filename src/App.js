@@ -7,6 +7,7 @@ const GRID_LINE_WIDTH = 1;
 const MagicSquare = ({ square, showGrid, showNumbers, drawings, onDraw }) => {
     const cellSize = 30;
     const adjustedCellSize = cellSize - GRID_LINE_WIDTH; // Adjust cell size to account for grid line width
+    const canvasSize = square.length * cellSize + cellSize / 2; // Make canvas slightly larger
 
     const handleDraw = (type) => {
         const maxNumber = square.length * square.length;
@@ -20,7 +21,7 @@ const MagicSquare = ({ square, showGrid, showNumbers, drawings, onDraw }) => {
             for (let i = 0; i < square.length; i++) {
                 for (let j = 0; j < square[i].length; j++) {
                     if (square[i][j] === num) {
-                        return [(j + 1) * adjustedCellSize + cellSize / 2, (i + 1) * adjustedCellSize + cellSize / 2]; // Move one cell right and one cell down
+                        return [(j + 0.5) * cellSize, (i + 0.5) * cellSize]; // Adjust position to center of each cell
                     }
                 }
             }
@@ -40,7 +41,7 @@ const MagicSquare = ({ square, showGrid, showNumbers, drawings, onDraw }) => {
                     ))
                 )}
             </div>
-            <canvas className="magic-square-canvas" width={square.length * cellSize} height={square.length * cellSize} ref={(canvas) => {
+            <canvas className="magic-square-canvas" width={canvasSize} height={canvasSize} ref={(canvas) => {
                 if (canvas) {
                     const context = canvas.getContext('2d');
                     context.clearRect(0, 0, canvas.width, canvas.height);
@@ -51,6 +52,7 @@ const MagicSquare = ({ square, showGrid, showNumbers, drawings, onDraw }) => {
                             context.beginPath();
                             context.moveTo(positions[0][0], positions[0][1]);
                             positions.forEach(([x, y]) => context.lineTo(x, y));
+                            context.lineTo(positions[0][0], positions[0][1]); // Connect back to the starting point
                             context.strokeStyle = type === 'all' ? 'cyan' : type === 'even' ? 'magenta' : 'lime';
                             context.lineWidth = 2;
                             context.stroke();
