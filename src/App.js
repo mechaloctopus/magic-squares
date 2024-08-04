@@ -30,13 +30,13 @@ const MagicSquare = ({ square, showGrid, showNumbers, drawings, onDraw }) => {
     return (
         <div className="magic-square-container">
             <div className="magic-square-grid" style={{ gridTemplateColumns: `repeat(${square.length}, ${cellSize}px)`, gridTemplateRows: `repeat(${square.length}, ${cellSize}px)` }}>
-                {square.map((row, rowIndex) => (
+                {square.flatMap((row, rowIndex) =>
                     row.map((cell, cellIndex) => (
                         <div key={`${rowIndex}-${cellIndex}`} className={`cell ${showGrid ? '' : 'no-border'}`} style={{ visibility: showNumbers ? 'visible' : 'hidden' }}>
                             {cell}
                         </div>
                     ))
-                ))}
+                )}
             </div>
             <canvas className="magic-square-canvas" width={square.length * cellSize} height={square.length * cellSize} ref={(canvas) => {
                 if (canvas) {
