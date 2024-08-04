@@ -20,6 +20,7 @@
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     width: fit-content; /* Ensure container width is based on content */
+    min-height: 500px; /* Set a minimum height to ensure ample space */
 }
 
 .grid-canvas-container {
@@ -27,14 +28,14 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 20px; /* Add space between grid and buttons */
+    margin-bottom: 40px; /* Add space between grid and buttons */
     width: fit-content; /* Ensure the container adjusts based on grid size */
 }
 
 .magic-square-grid {
     display: grid;
     gap: 0;
-    position: absolute;
+    position: relative;
     z-index: 1;
 }
 
@@ -62,6 +63,7 @@
 .button-group {
     display: flex;
     justify-content: center;
+    flex-wrap: wrap; /* Allow buttons to wrap if they don't fit in a single line */
     margin-top: 20px; /* Increased margin to ensure space between buttons and grid */
     margin-bottom: 20px; /* Add space between buttons and next square */
 }
