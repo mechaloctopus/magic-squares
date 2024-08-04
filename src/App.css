@@ -13,7 +13,7 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    align-items: center; /* Center align */
+    align-items: flex-start;
     margin: 20px;
     background-color: #1a1a1a;
     padding: 20px;
@@ -89,4 +89,12 @@
 .checkbox-group label {
     margin-right: 10px;
     color: white;
+}
+
+.controls {
+    margin-top: 20px;
+}
+
+.controls label {
+    margin-right: 10px;
 }
