@@ -25,7 +25,7 @@
     display: grid;
     gap: 0;
     position: relative;
-    z-index: 2; /* Make sure the grid is above the container background */
+    z-index: 2; /* Ensure the grid is above the container background */
 }
 
 .cell {
