@@ -4,7 +4,7 @@ import './App.css';
 const ITEMS_PER_PAGE = 20;
 const GRID_LINE_WIDTH = 1;
 
-const MagicSquare = ({ square, showGrid, showNumbers, drawings, onDraw }) => {
+const MagicSquare = ({ square, showGrid, showNumbers, drawings, onDraw, offsetX, offsetY, scale }) => {
     const cellSize = 30;
 
     const handleDraw = (type) => {
@@ -19,7 +19,10 @@ const MagicSquare = ({ square, showGrid, showNumbers, drawings, onDraw }) => {
             for (let i = 0; i < square.length; i++) {
                 for (let j = 0; j < square[i].length; j++) {
                     if (square[i][j] === num) {
-                        return [(j + 0.5) * cellSize, (i + 0.5) * cellSize]; // Adjust position to center of each cell
+                        return [
+                            (j + 0.5) * cellSize * scale + offsetX, 
+                            (i + 0.5) * cellSize * scale + offsetY
+                        ]; // Adjust position to center of each cell and apply scale and offsets
                     }
                 }
             }
@@ -39,7 +42,7 @@ const MagicSquare = ({ square, showGrid, showNumbers, drawings, onDraw }) => {
                     ))
                 )}
             </div>
-            <canvas className="magic-square-canvas" width={square.length * cellSize} height={square.length * cellSize} ref={(canvas) => {
+            <canvas className="magic-square-canvas" width={square.length * cellSize * scale} height={square.length * cellSize * scale} ref={(canvas) => {
                 if (canvas) {
                     const context = canvas.getContext('2d');
                     context.clearRect(0, 0, canvas.width, canvas.height);
@@ -81,6 +84,9 @@ const App = () => {
     const [drawings, setDrawings] = useState({});
     const [showGrid, setShowGrid] = useState(true);
     const [showNumbers, setShowNumbers] = useState(true);
+    const [offsetX, setOffsetX] = useState(0);
+    const [offsetY, setOffsetY] = useState(0);
+    const [scale, setScale] = useState(1);
 
     useEffect(() => {
         fetch('/complete_magic_squares.json')
@@ -113,12 +119,29 @@ const App = () => {
                     showNumbers={showNumbers}
                     drawings={drawings[index] || {}}
                     onDraw={(type, data) => handleDraw(index, type, data)}
+                    offsetX={offsetX}
+                    offsetY={offsetY}
+                    scale={scale}
                 />
             ))}
             <div className="pagination">
                 <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1}>Previous</button>
                 <span>Page {currentPage} of {totalPages}</span>
                 <button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === totalPages}>Next</button>
+            </div>
+            <div className="controls">
+                <label>
+                    Offset X:
+                    <input type="number" value={offsetX} onChange={(e) => setOffsetX(Number(e.target.value))} />
+                </label>
+                <label>
+                    Offset Y:
+                    <input type="number" value={offsetY} onChange={(e) => setOffsetY(Number(e.target.value))} />
+                </label>
+                <label>
+                    Scale:
+                    <input type="number" value={scale} step="0.1" onChange={(e) => setScale(Number(e.target.value))} />
+                </label>
             </div>
         </div>
     );
