@@ -8,27 +8,35 @@ const MagicSquare = ({ square, showGrid, showNumbers, drawings, onDraw }) => {
     const canvasRef = useRef(null);
 
     const handleDraw = (type) => {
-        const maxNumber = square.length * square.length;
-        const sequence = Array.from({ length: maxNumber }, (_, i) => i + 1).filter(num => {
-            if (type === 'all') return true;
-            if (type === 'even') return num % 2 === 0;
-            if (type === 'odd') return num % 2 !== 0;
-        });
+        try {
+            const maxNumber = square.length * square.length;
+            const sequence = Array.from({ length: maxNumber }, (_, i) => i + 1).filter(num => {
+                if (type === 'all') return true;
+                if (type === 'even') return num % 2 === 0;
+                if (type === 'odd') return num % 2 !== 0;
+            });
 
-        const positions = sequence.map(num => {
-            for (let i = 0; i < square.length; i++) {
-                for (let j = 0; j < square[i].length; j++) {
-                    if (square[i][j] === num) {
-                        return [
-                            (j + 0.5) * cellSize,
-                            (i + 0.5) * cellSize
-                        ];
+            const positions = sequence.map(num => {
+                for (let i = 0; i < square.length; i++) {
+                    for (let j = 0; j < square[i].length; j++) {
+                        if (square[i][j] === num) {
+                            return [
+                                (j + 0.5) * cellSize,
+                                (i + 0.5) * cellSize
+                            ];
+                        }
                     }
                 }
-            }
-        });
+            }).filter(pos => pos !== undefined); // Filter out undefined positions
 
-        onDraw(type, positions);
+            if (positions.length === 0) {
+                throw new Error('No positions calculated for the sequence.');
+            }
+
+            onDraw(type, positions);
+        } catch (error) {
+            console.error('Error in handleDraw:', error);
+        }
     };
 
     useEffect(() => {
@@ -102,9 +110,13 @@ const App = () => {
     }, [currentPage]);
 
     const handleDraw = (index, type, data) => {
-        if (type === 'toggleGrid') setShowGrid(data);
-        else if (type === 'toggleNumbers') setShowNumbers(data);
-        else setDrawings(prevDrawings => ({ ...prevDrawings, [index]: { ...prevDrawings[index], [type]: data } }));
+        try {
+            if (type === 'toggleGrid') setShowGrid(data);
+            else if (type === 'toggleNumbers') setShowNumbers(data);
+            else setDrawings(prevDrawings => ({ ...prevDrawings, [index]: { ...prevDrawings[index], [type]: data } }));
+        } catch (error) {
+            console.error('Error in handleDraw:', error);
+        }
     };
 
     const totalPages = Math.ceil(magicSquares.length / ITEMS_PER_PAGE);
