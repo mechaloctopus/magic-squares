@@ -14,13 +14,12 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 20px;
+    margin: 40px; /* Increased margin to ensure space between containers */
     background-color: #1a1a1a;
-    padding: 20px;
+    padding: 40px; /* Increased padding to ensure space within the container */
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     width: fit-content; /* Ensure container width is based on content */
-    min-height: fit-content; /* Ensure container height is based on content */
 }
 
 .grid-canvas-container {
@@ -63,14 +62,14 @@
 .button-group {
     display: flex;
     justify-content: center;
-    margin-top: 10px;
-    margin-bottom: 10px; /* Add space between buttons and next square */
+    margin-top: 20px; /* Increased margin to ensure space between buttons and grid */
+    margin-bottom: 20px; /* Add space between buttons and next square */
 }
 
 .black-button {
     background-color: black;
     color: white;
-    margin: 5px;
+    margin: 10px;
     padding: 10px;
     border: none;
     cursor: pointer;
@@ -79,7 +78,7 @@
 .blue-button {
     background-color: blue;
     color: white;
-    margin: 5px;
+    margin: 10px;
     padding: 10px;
     border: none;
     cursor: pointer;
@@ -88,18 +87,18 @@
 .red-button {
     background-color: red;
     color: white;
-    margin: 5px;
+    margin: 10px;
     padding: 10px;
     border: none;
     cursor: pointer;
 }
 
 .checkbox-group {
-    margin-top: 10px;
+    margin-top: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 10px; /* Space out the checkboxes */
+    gap: 20px; /* Increased space between checkboxes */
 }
 
 .checkbox-group label {
