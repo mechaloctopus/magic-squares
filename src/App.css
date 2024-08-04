@@ -47,7 +47,7 @@
     position: absolute;
     top: 0; /* Ensure the canvas is aligned correctly */
     left: 0; /* Ensure the canvas is aligned correctly */
-    z-index: 3; /* Ensure the canvas is on top */
+    z-index: 2; /* Ensure the canvas is on top */
     pointer-events: none;
 }
 
