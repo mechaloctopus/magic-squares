@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import './App.css';
 
 const ITEMS_PER_PAGE = 20;
 
 const MagicSquare = ({ square, showGrid, showNumbers, drawings, onDraw, offsetX, offsetY, scale }) => {
     const cellSize = 30;
+    const canvasRef = useRef(null);
 
     const handleDraw = (type) => {
         const maxNumber = square.length * square.length;
@@ -19,9 +20,9 @@ const MagicSquare = ({ square, showGrid, showNumbers, drawings, onDraw, offsetX,
                 for (let j = 0; j < square[i].length; j++) {
                     if (square[i][j] === num) {
                         return [
-                            (j + 0.5) * cellSize * scale + offsetX, 
-                            (i + 0.5) * cellSize * scale + offsetY
-                        ]; // Adjust position to center of each cell and apply scale and offsets
+                            (j + 0.5) * cellSize + offsetX, 
+                            (i + 0.5) * cellSize + offsetY
+                        ]; // Adjust position to center of each cell and apply offsets
                     }
                 }
             }
@@ -30,27 +31,29 @@ const MagicSquare = ({ square, showGrid, showNumbers, drawings, onDraw, offsetX,
         onDraw(type, positions);
     };
 
+    useEffect(() => {
+        const canvas = canvasRef.current;
+        if (canvas) {
+            const context = canvas.getContext('2d');
+            context.clearRect(0, 0, canvas.width, canvas.height);
+
+            Object.keys(drawings).forEach(type => {
+                const positions = drawings[type];
+                if (positions && positions.length > 0) {
+                    context.beginPath();
+                    context.moveTo(positions[0][0], positions[0][1]);
+                    positions.forEach(([x, y]) => context.lineTo(x, y));
+                    context.lineTo(positions[0][0], positions[0][1]); // Connect back to the starting point
+                    context.strokeStyle = type === 'all' ? 'cyan' : type === 'even' ? 'magenta' : 'lime';
+                    context.lineWidth = 2;
+                    context.stroke();
+                }
+            });
+        }
+    }, [drawings, offsetX, offsetY]);
+
     return (
         <div className="magic-square-container">
-            <canvas className="magic-square-canvas" width={square.length * cellSize * scale} height={square.length * cellSize * scale} ref={(canvas) => {
-                if (canvas) {
-                    const context = canvas.getContext('2d');
-                    context.clearRect(0, 0, canvas.width, canvas.height);
-
-                    Object.keys(drawings).forEach(type => {
-                        const positions = drawings[type];
-                        if (positions.length > 0) {
-                            context.beginPath();
-                            context.moveTo(positions[0][0], positions[0][1]);
-                            positions.forEach(([x, y]) => context.lineTo(x, y));
-                            context.lineTo(positions[0][0], positions[0][1]); // Connect back to the starting point
-                            context.strokeStyle = type === 'all' ? 'cyan' : type === 'even' ? 'magenta' : 'lime';
-                            context.lineWidth = 2;
-                            context.stroke();
-                        }
-                    });
-                }
-            }}></canvas>
             <div className="magic-square-grid" style={{ gridTemplateColumns: `repeat(${square.length}, ${cellSize}px)`, gridTemplateRows: `repeat(${square.length}, ${cellSize}px)` }}>
                 {square.flatMap((row, rowIndex) =>
                     row.map((cell, cellIndex) => (
@@ -60,6 +63,7 @@ const MagicSquare = ({ square, showGrid, showNumbers, drawings, onDraw, offsetX,
                     ))
                 )}
             </div>
+            <canvas className="magic-square-canvas" ref={canvasRef} width={square.length * cellSize} height={square.length * cellSize}></canvas>
             <div className="button-group">
                 <button onClick={() => handleDraw('all')} className="black-button">Magic Button 1</button>
                 <button onClick={() => handleDraw('even')} className="blue-button">Magic Button 2</button>
@@ -85,7 +89,6 @@ const App = () => {
     const [showNumbers, setShowNumbers] = useState(true);
     const [offsetX, setOffsetX] = useState(0); // Adjust this value for initial horizontal position
     const [offsetY, setOffsetY] = useState(0); // Adjust this value for initial vertical position
-    const [scale, setScale] = useState(1); // Adjust this value for initial scale
 
     useEffect(() => {
         fetch('/complete_magic_squares.json')
@@ -120,7 +123,6 @@ const App = () => {
                     onDraw={(type, data) => handleDraw(index, type, data)}
                     offsetX={offsetX}
                     offsetY={offsetY}
-                    scale={scale}
                 />
             ))}
             <div className="pagination">
@@ -136,10 +138,6 @@ const App = () => {
                 <label>
                     Offset Y:
                     <input type="number" value={offsetY} onChange={(e) => setOffsetY(Number(e.target.value))} />
-                </label>
-                <label>
-                    Scale:
-                    <input type="number" value={scale} step="0.1" onChange={(e) => setScale(Number(e.target.value))} />
                 </label>
             </div>
         </div>
