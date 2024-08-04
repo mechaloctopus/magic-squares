@@ -45,8 +45,8 @@
 
 .magic-square-canvas {
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 30px; /* Adjusted to move one cell down */
+    left: 30px; /* Adjusted to move one cell right */
     z-index: 1;
     pointer-events: none;
 }
