@@ -32,15 +32,6 @@ const MagicSquare = ({ square, showGrid, showNumbers, drawings, onDraw, offsetX,
 
     return (
         <div className="magic-square-container">
-            <div className="magic-square-grid" style={{ gridTemplateColumns: `repeat(${square.length}, ${cellSize}px)`, gridTemplateRows: `repeat(${square.length}, ${cellSize}px)` }}>
-                {square.flatMap((row, rowIndex) =>
-                    row.map((cell, cellIndex) => (
-                        <div key={`${rowIndex}-${cellIndex}`} className={`cell ${showGrid ? '' : 'no-border'}`} style={{ visibility: showNumbers ? 'visible' : 'hidden' }}>
-                            {cell}
-                        </div>
-                    ))
-                )}
-            </div>
             <canvas className="magic-square-canvas" width={square.length * cellSize * scale} height={square.length * cellSize * scale} ref={(canvas) => {
                 if (canvas) {
                     const context = canvas.getContext('2d');
@@ -60,6 +51,15 @@ const MagicSquare = ({ square, showGrid, showNumbers, drawings, onDraw, offsetX,
                     });
                 }
             }}></canvas>
+            <div className="magic-square-grid" style={{ gridTemplateColumns: `repeat(${square.length}, ${cellSize}px)`, gridTemplateRows: `repeat(${square.length}, ${cellSize}px)` }}>
+                {square.flatMap((row, rowIndex) =>
+                    row.map((cell, cellIndex) => (
+                        <div key={`${rowIndex}-${cellIndex}`} className={`cell ${showGrid ? '' : 'no-border'}`} style={{ visibility: showNumbers ? 'visible' : 'hidden' }}>
+                            {cell}
+                        </div>
+                    ))
+                )}
+            </div>
             <div className="button-group">
                 <button onClick={() => handleDraw('all')} className="black-button">Magic Button 1</button>
                 <button onClick={() => handleDraw('even')} className="blue-button">Magic Button 2</button>
@@ -83,8 +83,8 @@ const App = () => {
     const [drawings, setDrawings] = useState({});
     const [showGrid, setShowGrid] = useState(true);
     const [showNumbers, setShowNumbers] = useState(true);
-    const [offsetX, setOffsetX] = useState(10); // Adjust this value for initial horizontal position
-    const [offsetY, setOffsetY] = useState(10); // Adjust this value for initial vertical position
+    const [offsetX, setOffsetX] = useState(0); // Adjust this value for initial horizontal position
+    const [offsetY, setOffsetY] = useState(0); // Adjust this value for initial vertical position
     const [scale, setScale] = useState(1); // Adjust this value for initial scale
 
     useEffect(() => {
