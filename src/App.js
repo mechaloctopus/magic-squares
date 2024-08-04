@@ -3,36 +3,32 @@ import './App.css';
 
 const ITEMS_PER_PAGE = 20;
 
-const MagicSquare = ({ square, showGrid, showNumbers, drawings, onDraw, offsetX, offsetY }) => {
+const MagicSquare = ({ square, showGrid, showNumbers, drawings, onDraw }) => {
     const cellSize = 30;
     const canvasRef = useRef(null);
 
     const handleDraw = (type) => {
-        try {
-            const maxNumber = square.length * square.length;
-            const sequence = Array.from({ length: maxNumber }, (_, i) => i + 1).filter(num => {
-                if (type === 'all') return true;
-                if (type === 'even') return num % 2 === 0;
-                if (type === 'odd') return num % 2 !== 0;
-            });
+        const maxNumber = square.length * square.length;
+        const sequence = Array.from({ length: maxNumber }, (_, i) => i + 1).filter(num => {
+            if (type === 'all') return true;
+            if (type === 'even') return num % 2 === 0;
+            if (type === 'odd') return num % 2 !== 0;
+        });
 
-            const positions = sequence.map(num => {
-                for (let i = 0; i < square.length; i++) {
-                    for (let j = 0; j < square[i].length; j++) {
-                        if (square[i][j] === num) {
-                            return [
-                                (j + 0.5) * cellSize + offsetX, 
-                                (i + 0.5) * cellSize + offsetY
-                            ]; // Adjust position to center of each cell and apply offsets
-                        }
+        const positions = sequence.map(num => {
+            for (let i = 0; i < square.length; i++) {
+                for (let j = 0; j < square[i].length; j++) {
+                    if (square[i][j] === num) {
+                        return [
+                            (j + 0.5) * cellSize,
+                            (i + 0.5) * cellSize
+                        ];
                     }
                 }
-            });
+            }
+        });
 
-            onDraw(type, positions);
-        } catch (error) {
-            console.error('Error in handleDraw:', error);
-        }
+        onDraw(type, positions);
     };
 
     useEffect(() => {
@@ -47,26 +43,28 @@ const MagicSquare = ({ square, showGrid, showNumbers, drawings, onDraw, offsetX,
                     context.beginPath();
                     context.moveTo(positions[0][0], positions[0][1]);
                     positions.forEach(([x, y]) => context.lineTo(x, y));
-                    context.lineTo(positions[0][0], positions[0][1]); // Connect back to the starting point
+                    context.lineTo(positions[0][0], positions[0][1]);
                     context.strokeStyle = type === 'all' ? 'cyan' : type === 'even' ? 'magenta' : 'lime';
                     context.lineWidth = 2;
                     context.stroke();
                 }
             });
         }
-    }, [drawings, offsetX, offsetY]);
+    }, [drawings]);
 
     return (
         <div className="magic-square-container">
-            <canvas className="magic-square-canvas" ref={canvasRef} width={square.length * cellSize} height={square.length * cellSize}></canvas>
-            <div className="magic-square-grid" style={{ gridTemplateColumns: `repeat(${square.length}, ${cellSize}px)`, gridTemplateRows: `repeat(${square.length}, ${cellSize}px)` }}>
-                {square.flatMap((row, rowIndex) =>
-                    row.map((cell, cellIndex) => (
-                        <div key={`${rowIndex}-${cellIndex}`} className={`cell ${showGrid ? '' : 'no-border'}`} style={{ visibility: showNumbers ? 'visible' : 'hidden' }}>
-                            {cell}
-                        </div>
-                    ))
-                )}
+            <div className="grid-canvas-container">
+                <canvas className="magic-square-canvas" ref={canvasRef} width={square.length * cellSize} height={square.length * cellSize}></canvas>
+                <div className="magic-square-grid" style={{ gridTemplateColumns: `repeat(${square.length}, ${cellSize}px)`, gridTemplateRows: `repeat(${square.length}, ${cellSize}px)` }}>
+                    {square.flatMap((row, rowIndex) =>
+                        row.map((cell, cellIndex) => (
+                            <div key={`${rowIndex}-${cellIndex}`} className={`cell ${showGrid ? '' : 'no-border'}`} style={{ visibility: showNumbers ? 'visible' : 'hidden' }}>
+                                {cell}
+                            </div>
+                        ))
+                    )}
+                </div>
             </div>
             <div className="button-group">
                 <button onClick={() => handleDraw('all')} className="black-button">Magic Button 1</button>
@@ -91,8 +89,6 @@ const App = () => {
     const [drawings, setDrawings] = useState({});
     const [showGrid, setShowGrid] = useState(true);
     const [showNumbers, setShowNumbers] = useState(true);
-    const [offsetX, setOffsetX] = useState(0); // Adjust this value for initial horizontal position
-    const [offsetY, setOffsetY] = useState(0); // Adjust this value for initial vertical position
 
     useEffect(() => {
         fetch('/complete_magic_squares.json')
@@ -106,13 +102,9 @@ const App = () => {
     }, [currentPage]);
 
     const handleDraw = (index, type, data) => {
-        try {
-            if (type === 'toggleGrid') setShowGrid(data);
-            else if (type === 'toggleNumbers') setShowNumbers(data);
-            else setDrawings(prevDrawings => ({ ...prevDrawings, [index]: { ...prevDrawings[index], [type]: data } }));
-        } catch (error) {
-            console.error('Error in handleDraw:', error);
-        }
+        if (type === 'toggleGrid') setShowGrid(data);
+        else if (type === 'toggleNumbers') setShowNumbers(data);
+        else setDrawings(prevDrawings => ({ ...prevDrawings, [index]: { ...prevDrawings[index], [type]: data } }));
     };
 
     const totalPages = Math.ceil(magicSquares.length / ITEMS_PER_PAGE);
@@ -129,24 +121,12 @@ const App = () => {
                     showNumbers={showNumbers}
                     drawings={drawings[index] || {}}
                     onDraw={(type, data) => handleDraw(index, type, data)}
-                    offsetX={offsetX}
-                    offsetY={offsetY}
                 />
             ))}
             <div className="pagination">
                 <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1}>Previous</button>
                 <span>Page {currentPage} of {totalPages}</span>
                 <button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === totalPages}>Next</button>
-            </div>
-            <div className="controls">
-                <label>
-                    Offset X:
-                    <input type="number" value={offsetX} onChange={(e) => setOffsetX(Number(e.target.value))} />
-                </label>
-                <label>
-                    Offset Y:
-                    <input type="number" value={offsetY} onChange={(e) => setOffsetY(Number(e.target.value))} />
-                </label>
             </div>
         </div>
     );
