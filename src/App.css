@@ -19,6 +19,7 @@
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    width: fit-content; /* Ensure container width is based on content */
 }
 
 .grid-canvas-container {
@@ -26,6 +27,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-bottom: 20px; /* Add space between grid and buttons */
 }
 
 .magic-square-grid {
@@ -57,7 +59,10 @@
 }
 
 .button-group {
+    display: flex;
+    justify-content: center;
     margin-top: 10px;
+    margin-bottom: 10px; /* Add space between buttons and next square */
 }
 
 .black-button {
@@ -89,9 +94,20 @@
 
 .checkbox-group {
     margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px; /* Space out the checkboxes */
 }
 
 .checkbox-group label {
-    margin-right: 10px;
     color: white;
+}
+
+.controls {
+    margin-top: 20px;
+}
+
+.controls label {
+    margin-right: 10px;
 }
