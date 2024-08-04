@@ -18,7 +18,7 @@ const MagicSquare = ({ square, showGrid, showNumbers, drawings, onDraw }) => {
             for (let i = 0; i < square.length; i++) {
                 for (let j = 0; j < square[i].length; j++) {
                     if (square[i][j] === num) {
-                        return [(j * cellSize) + (cellSize / 2), (i * cellSize) + (cellSize / 2)];
+                        return [j * cellSize + cellSize / 2, i * cellSize + cellSize / 2];
                     }
                 }
             }
