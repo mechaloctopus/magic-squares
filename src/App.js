@@ -3,32 +3,36 @@ import './App.css';
 
 const ITEMS_PER_PAGE = 20;
 
-const MagicSquare = ({ square, showGrid, showNumbers, drawings, onDraw, offsetX, offsetY, scale }) => {
+const MagicSquare = ({ square, showGrid, showNumbers, drawings, onDraw, offsetX, offsetY }) => {
     const cellSize = 30;
     const canvasRef = useRef(null);
 
     const handleDraw = (type) => {
-        const maxNumber = square.length * square.length;
-        const sequence = Array.from({ length: maxNumber }, (_, i) => i + 1).filter(num => {
-            if (type === 'all') return true;
-            if (type === 'even') return num % 2 === 0;
-            if (type === 'odd') return num % 2 !== 0;
-        });
+        try {
+            const maxNumber = square.length * square.length;
+            const sequence = Array.from({ length: maxNumber }, (_, i) => i + 1).filter(num => {
+                if (type === 'all') return true;
+                if (type === 'even') return num % 2 === 0;
+                if (type === 'odd') return num % 2 !== 0;
+            });
 
-        const positions = sequence.map(num => {
-            for (let i = 0; i < square.length; i++) {
-                for (let j = 0; j < square[i].length; j++) {
-                    if (square[i][j] === num) {
-                        return [
-                            (j + 0.5) * cellSize + offsetX, 
-                            (i + 0.5) * cellSize + offsetY
-                        ]; // Adjust position to center of each cell and apply offsets
+            const positions = sequence.map(num => {
+                for (let i = 0; i < square.length; i++) {
+                    for (let j = 0; j < square[i].length; j++) {
+                        if (square[i][j] === num) {
+                            return [
+                                (j + 0.5) * cellSize + offsetX, 
+                                (i + 0.5) * cellSize + offsetY
+                            ]; // Adjust position to center of each cell and apply offsets
+                        }
                     }
                 }
-            }
-        });
+            });
 
-        onDraw(type, positions);
+            onDraw(type, positions);
+        } catch (error) {
+            console.error('Error in handleDraw:', error);
+        }
     };
 
     useEffect(() => {
@@ -54,6 +58,7 @@ const MagicSquare = ({ square, showGrid, showNumbers, drawings, onDraw, offsetX,
 
     return (
         <div className="magic-square-container">
+            <canvas className="magic-square-canvas" ref={canvasRef} width={square.length * cellSize} height={square.length * cellSize}></canvas>
             <div className="magic-square-grid" style={{ gridTemplateColumns: `repeat(${square.length}, ${cellSize}px)`, gridTemplateRows: `repeat(${square.length}, ${cellSize}px)` }}>
                 {square.flatMap((row, rowIndex) =>
                     row.map((cell, cellIndex) => (
@@ -63,7 +68,6 @@ const MagicSquare = ({ square, showGrid, showNumbers, drawings, onDraw, offsetX,
                     ))
                 )}
             </div>
-            <canvas className="magic-square-canvas" ref={canvasRef} width={square.length * cellSize} height={square.length * cellSize}></canvas>
             <div className="button-group">
                 <button onClick={() => handleDraw('all')} className="black-button">Magic Button 1</button>
                 <button onClick={() => handleDraw('even')} className="blue-button">Magic Button 2</button>
@@ -102,9 +106,13 @@ const App = () => {
     }, [currentPage]);
 
     const handleDraw = (index, type, data) => {
-        if (type === 'toggleGrid') setShowGrid(data);
-        else if (type === 'toggleNumbers') setShowNumbers(data);
-        else setDrawings(prevDrawings => ({ ...prevDrawings, [index]: { ...prevDrawings[index], [type]: data } }));
+        try {
+            if (type === 'toggleGrid') setShowGrid(data);
+            else if (type === 'toggleNumbers') setShowNumbers(data);
+            else setDrawings(prevDrawings => ({ ...prevDrawings, [index]: { ...prevDrawings[index], [type]: data } }));
+        } catch (error) {
+            console.error('Error in handleDraw:', error);
+        }
     };
 
     const totalPages = Math.ceil(magicSquares.length / ITEMS_PER_PAGE);
