@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from 'react';
 import MagicSquare from './MagicSquare';
 import './App.css'; // Ensure you have some basic styles for buttons and layout
 
