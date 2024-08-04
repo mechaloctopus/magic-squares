@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 
 const ITEMS_PER_PAGE = 20;
+const GRID_LINE_WIDTH = 1;
 
 const MagicSquare = ({ square, showGrid, showNumbers, drawings, onDraw }) => {
     const cellSize = 30;
+    const adjustedCellSize = cellSize - GRID_LINE_WIDTH; // Adjust cell size to account for grid line width
 
     const handleDraw = (type) => {
         const maxNumber = square.length * square.length;
@@ -18,7 +20,7 @@ const MagicSquare = ({ square, showGrid, showNumbers, drawings, onDraw }) => {
             for (let i = 0; i < square.length; i++) {
                 for (let j = 0; j < square[i].length; j++) {
                     if (square[i][j] === num) {
-                        return [j * cellSize + cellSize / 2, i * cellSize + cellSize / 2];
+                        return [j * adjustedCellSize + cellSize / 2, i * adjustedCellSize + cellSize / 2];
                     }
                 }
             }
